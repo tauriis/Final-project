@@ -11,7 +11,10 @@
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "mongodb": "^6.6.2",
+    "mongoose": "^8.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -22,13 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eject": "react-scripts eject",
+    "dev": "nodemon app.tsx"
   },
   "browserslist": {
     "production": [
@@ -41,5 +39,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.0.1",
+    "@eslint/js": "^9.3.0",
+    "@types/mongoose": "^5.11.97",
+    "eslint": "^9.3.0",
+    "eslint-plugin-react": "^7.34.1",
+    "globals": "^15.3.0",
+    "nodemon": "^3.1.0",
+    "typescript-eslint": "^7.9.0"
   }
 }
