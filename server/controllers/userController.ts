@@ -2,7 +2,6 @@ import asyncHandler from "express-async-handler";
 import { Request, Response } from "express";
 import User from "../modules/users";
 import generateToken from "../utils/generateToken";
-import { Document } from "mongoose";
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
   const users = await User.find({}).select("-password");
