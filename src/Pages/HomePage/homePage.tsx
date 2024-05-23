@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./homePage.css";
 import Header from "../../Components/Header/header";
+import { formatDistanceToNow } from "date-fns";
 
 interface User {
   _id: string;
@@ -13,7 +14,11 @@ interface Post {
   _id: string;
   title: string;
   content: string;
-  userId: User;
+  userId: {
+    _id: string;
+    username: string;
+  };
+  createdAt: string | null;
 }
 
 const HomePage = () => {
@@ -30,7 +35,10 @@ const HomePage = () => {
           },
         });
 
-        setPosts(response.data);
+        // Get the last 3 posts
+        const lastThreePosts = response.data.slice(-3);
+
+        setPosts(lastThreePosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
       }
@@ -51,6 +59,9 @@ const HomePage = () => {
               <p>{post.content}</p>
             </Link>
             <p>Posted by {post.userId.username}</p>
+            {post.createdAt && (
+              <p>Posted {formatDistanceToNow(new Date(post.createdAt))} ago</p>
+            )}
           </div>
         ))}
       </div>
