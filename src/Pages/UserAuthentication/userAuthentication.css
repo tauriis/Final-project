@@ -1,0 +1,154 @@
+:root {
+    --auth-boxshadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    --primary-bg-color: rgb(255, 224, 181);
+    --secondary-bg-color: rgb(248, 199, 148);
+
+}
+
+/* Login page */
+
+main.authMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
+}
+
+form#loginFields {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 70px;
+  background-color: var(--secondary-bg-color);
+  border-radius: 15px;
+
+  input {
+    margin-bottom: 20px;
+    outline: none;
+    border: none;
+    padding: 5px;
+    width: 240px;
+    border-radius: 8px;
+    opacity: .8;
+  }
+
+  input::placeholder {
+    font-size: 12px;
+  }
+
+  input:focus {
+    box-shadow: var(--auth-boxshadow);
+    scale: 1.05;
+    opacity: 1;
+  }
+
+  button {
+    padding: 5px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bolder;
+    position: relative;
+    margin-top: 20px;
+    opacity: .8;
+  }
+
+  button:hover {
+    cursor: pointer;
+    scale: 1.05;
+    box-shadow: var(--auth-boxshadow);
+    opacity: 1;
+  }
+}
+
+div.authRedirect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-direction: column;
+    
+    p {
+        margin-right: 10px;
+        color: black;
+        font-size: 16px;
+    }
+    
+    button {
+        padding: 5px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        font-weight: bolder;
+        position: relative;
+        margin-top: 10px;
+        opacity: .8;
+    }
+
+    button:hover {
+        cursor: pointer;
+        scale: 1.05;
+        box-shadow: var(--dark-boxshadow);
+        opacity: 1;
+    }
+}
+
+/* Registration page */
+
+main.registrationMain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 70px;
+    background-color: var(--secondary-bg-color);
+    border-radius: 15px;
+
+    input {
+      margin-bottom: 20px;
+      outline: none;
+      border: none;
+      padding: 5px;
+      width: 240px;
+      border-radius: 8px;
+      opacity: .8;
+    }
+
+    input::placeholder {
+      font-size: 12px;
+    }
+
+    input:focus {
+      box-shadow: var(--auth-boxshadow);
+      scale: 1.05;
+      opacity: 1;
+    }
+
+    button {
+      padding: 5px 20px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+      font-weight: bolder;
+      position: relative;
+      margin-top: 20px;
+      opacity: .8;
+    }
+
+    button:hover {
+      cursor: pointer;
+      scale: 1.05;
+      box-shadow: var(--auth-boxshadow);
+      opacity: 1;
+    }
+  }
+}

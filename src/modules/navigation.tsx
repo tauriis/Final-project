@@ -1,29 +1,43 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom";
 import HomePage from "../Pages/HomePage/homePage";
-import LandingPage from "./userAuthentication";
+import LandingPage from "../Pages/UserAuthentication/userAuthentication";
 import Register from "./userRegistration";
 
 function Navigation() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();
-  
-    const handleLogin = () => {
-      setIsLoggedIn(true);
-      navigate('/');
-    }
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-    const handleRegister = () => {
-      navigate('/register');
-    }
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    navigate("/");
+  };
 
-    return (
-      <Routes>
-        <Route path="/login" element={<LandingPage onLogin={handleLogin} onRegister={handleRegister} />} />
-        <Route path="/register" element={<Register onLogin={handleLogin} />} />
-        <Route path="/" element={isLoggedIn ? <HomePage /> : <LandingPage onLogin={handleLogin} onRegister={handleRegister} />} />
-      </Routes>
-    );
+  const handleRegister = () => {
+    navigate("/register");
+  };
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <LandingPage onLogin={handleLogin} onRegister={handleRegister} />
+        }
+      />
+      <Route path="/register" element={<Register onLogin={handleLogin} />} />
+      <Route
+        path="/"
+        element={
+          isLoggedIn ? (
+            <HomePage />
+          ) : (
+            <LandingPage onLogin={handleLogin} onRegister={handleRegister} />
+          )
+        }
+      />
+    </Routes>
+  );
 }
 
 export default Navigation;

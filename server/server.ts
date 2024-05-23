@@ -1,13 +1,14 @@
-import express, { Application, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import connectDB from '../server/db';
-import { notFound, errorHandler } from './middlewares/ErrorMiddleware';
-import UserRoutes from './routes/userRoutes';
-import cors from 'cors';
+import express, { Application, Request, Response } from "express";
+import dotenv from "dotenv";
+import connectDB from "../server/db";
+import { notFound, errorHandler } from "./middlewares/ErrorMiddleware";
+import UserRoutes from "./routes/userRoutes";
+import postRoutes from "./routes/postRoutes";
+import cors from "cors";
 
 const app: Application = express();
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: "http://localhost:3000" }));
 
 dotenv.config();
 
@@ -18,14 +19,15 @@ app.use(express.json());
 console.log(process.env.MONGO_URI);
 
 // Default
-app.get("/", (req: Request, res: Response) =>  {
-    res.status(201).json({ message: "Welcome to Auth ts" });
-})
+app.get("/", (req: Request, res: Response) => {
+  res.status(201).json({ message: "Welcome" });
+});
 
 // User Route
 app.use("/api", UserRoutes);
 
-
+// Post Route
+app.use("/api", postRoutes);
 
 // Middleware
 app.use(notFound);
