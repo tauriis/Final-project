@@ -33,14 +33,18 @@ export const createComment = async (req: Request, res: Response) => {
     username: user.username,
     post: postId,
     user: req.user._id,
+    likes: [],
+    dislikes: [],
   });
-  
+
   await comment.save();
 
   post.comments.push({
     text: comment.text,
     username: comment.username,
     userId: comment.user,
+    likes: [],
+    dislikes: [],
   });
 
   await post.save();
@@ -71,21 +75,103 @@ export const deleteComment = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  const commentIndex = post.comments.findIndex((c: any) => c._id.toString() === commentId);
+  const commentIndex = post.comments.findIndex(
+    (c: any) => c._id.toString() === commentId
+  );
   if (commentIndex === -1) {
     return res.status(404).json({ message: "Comment not found" });
   }
 
   const comment = post.comments[commentIndex] as any;
 
-  if (req.user._id.toString() !== comment.userId.toString() && req.user._id.toString() !== post.userId.toString()) {
-    return res.status(403).json({ message: "You do not have permission to delete this comment" });
+  if (
+    req.user._id.toString() !== comment.userId.toString() &&
+    req.user._id.toString() !== post.userId.toString()
+  ) {
+    return res
+      .status(403)
+      .json({ message: "You do not have permission to delete this comment" });
   }
 
-  // Remove the comment
   post.comments.splice(commentIndex, 1);
 
   await post.save();
 
   res.json({ message: "Comment deleted" });
+};
+
+export const likeComment = async (req: Request, res: Response) => {
+  const { postId, commentId } = req.params;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const commentIndex = post.comments.findIndex(
+    (c: any) => c._id.toString() === commentId
+  );
+  if (commentIndex === -1) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+
+  const comment = post.comments[commentIndex] as any;
+
+
+  if (comment.likes.includes(req.user._id)) {
+    comment.likes = comment.likes.filter(
+      (id: any) => id.toString() !== req.user._id.toString()
+    );
+  } else {
+
+    comment.likes.push(req.user._id);
+
+    if (comment.dislikes.includes(req.user._id)) {
+      comment.dislikes = comment.dislikes.filter(
+        (id: any) => id.toString() !== req.user._id.toString()
+      );
+    }
+  }
+
+  await post.save();
+
+  res.json(post);
+};
+
+export const dislikeComment = async (req: Request, res: Response) => {
+  const { postId, commentId } = req.params;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const commentIndex = post.comments.findIndex(
+    (c: any) => c._id.toString() === commentId
+  );
+  if (commentIndex === -1) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+
+  const comment = post.comments[commentIndex] as any;
+
+  if (comment.dislikes.includes(req.user._id)) {
+
+    comment.dislikes = comment.dislikes.filter(
+      (id: any) => id.toString() !== req.user._id.toString()
+    );
+  } else {
+
+    comment.dislikes.push(req.user._id);
+
+    if (comment.likes.includes(req.user._id)) {
+      comment.likes = comment.likes.filter(
+        (id: any) => id.toString() !== req.user._id.toString()
+      );
+    }
+  }
+
+  await post.save();
+
+  res.json(post);
 };

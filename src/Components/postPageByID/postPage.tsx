@@ -7,6 +7,8 @@ interface Comment {
   text: string;
   username: string;
   userId: string;
+  likes: string[];
+  dislikes: string[];
 }
 
 interface Post {
@@ -138,6 +140,62 @@ const PostPage = () => {
     }
   };
 
+  const handleLikeComment = async (commentId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      await axios.post(
+        `http://localhost:5000/api/posts/${id}/comments/${commentId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      const response = await axios.get(
+        `http://localhost:5000/api/posts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setPost(response.data);
+    } catch (error) {
+      console.error("Error liking comment:", error);
+    }
+  };
+  
+  const handleDislikeComment = async (commentId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      await axios.post(
+        `http://localhost:5000/api/posts/${id}/comments/${commentId}/dislike`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      const response = await axios.get(
+        `http://localhost:5000/api/posts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setPost(response.data);
+    } catch (error) {
+      console.error("Error disliking comment:", error);
+    }
+  };
+
   return (
     <div>
       <h2>{post.title}</h2>
@@ -160,6 +218,12 @@ const PostPage = () => {
           <div key={index}>
             <p>{comment.text}</p>
             <p>Posted by {comment.username}</p>
+            <button onClick={() => handleLikeComment(comment._id)}>
+              Like ({comment.likes.length})
+            </button>
+            <button onClick={() => handleDislikeComment(comment._id)}>
+              Dislike ({comment.dislikes.length})
+            </button>
             {(currentUser.id === comment.userId ||
               currentUser.id === post.userId._id) && (
               <button onClick={() => handleDeleteComment(comment._id)}>
@@ -169,7 +233,6 @@ const PostPage = () => {
           </div>
         ))}
     </div>
-  );
-};
+  )};
 
 export default PostPage;

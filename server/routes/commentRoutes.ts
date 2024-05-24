@@ -4,6 +4,8 @@ import {
   getAllCommentsForPost,
   getCommentById,
   deleteComment,
+  likeComment,
+  dislikeComment,
 } from "../controllers/commentController";
 import { authenticateToken } from "../middlewares/authenticateToken";
 
@@ -34,6 +36,17 @@ router.delete(
   "/posts/:postId/comments/:commentId",
   authenticateToken,
   deleteComment as any
+);
+
+router.post(
+  "/posts/:postId/comments/:commentId/like",
+  authenticateToken,
+  likeComment as any
+);
+router.post(
+  "/posts/:postId/comments/:commentId/dislike",
+  authenticateToken,
+  dislikeComment as any
 );
 
 export default router;

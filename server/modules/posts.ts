@@ -4,6 +4,8 @@ interface IComment {
   text: string;
   username: string;
   userId: mongoose.Types.ObjectId;
+  likes: mongoose.Types.ObjectId[];
+  dislikes: mongoose.Types.ObjectId[];
 }
 
 interface IPost extends Document {
@@ -17,7 +19,13 @@ const PostSchema: Schema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  comments: [{ text: String, username: String, userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" } }], // Modify this line
+  comments: [{
+    text: String,
+    username: String,
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
+  }], 
 }, {
   timestamps: true,
 });
