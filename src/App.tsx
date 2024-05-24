@@ -4,12 +4,14 @@ import './App.css';
 import Navigation from './modules/navigation';
 import CreatePost from './Components/CreatePost/createPost';
 import PostPage from './Components/postPageByID/postPage';
+import AllPostsPage from './Pages/AllPosts/allPosts';
 
 function App() {
   return (
     <Router>
       <Navigation />
       <Routes>
+        <Route path="/all-posts" element={<AllPostsPage />} />
         <Route path="/create-post" element={<CreatePost />} />       
         <Route path="/posts/:id" element={<PostPage />} />
       </Routes>

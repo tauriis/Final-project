@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Header from "../Header/header";
 
 interface Comment {
   _id: string;
@@ -143,7 +144,7 @@ const PostPage = () => {
   const handleLikeComment = async (commentId: string) => {
     try {
       const token = localStorage.getItem("token");
-  
+
       await axios.post(
         `http://localhost:5000/api/posts/${id}/comments/${commentId}/like`,
         {},
@@ -153,7 +154,7 @@ const PostPage = () => {
           },
         }
       );
-  
+
       const response = await axios.get(
         `http://localhost:5000/api/posts/${id}`,
         {
@@ -167,11 +168,11 @@ const PostPage = () => {
       console.error("Error liking comment:", error);
     }
   };
-  
+
   const handleDislikeComment = async (commentId: string) => {
     try {
       const token = localStorage.getItem("token");
-  
+
       await axios.post(
         `http://localhost:5000/api/posts/${id}/comments/${commentId}/dislike`,
         {},
@@ -181,7 +182,7 @@ const PostPage = () => {
           },
         }
       );
-  
+
       const response = await axios.get(
         `http://localhost:5000/api/posts/${id}`,
         {
@@ -197,42 +198,46 @@ const PostPage = () => {
   };
 
   return (
-    <div>
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      <p>Posted by {post.userId.username}</p>
-      {post.userId._id === currentUser.id && (
-        <button onClick={deletePost}>Delete Post</button>
-      )}
-      <form onSubmit={handleCommentSubmit}>
-        <input
-          type="text"
-          value={comment}
-          onChange={handleCommentChange}
-          placeholder="Write a comment"
-        />
-        <button type="submit">Submit Comment</button>
-      </form>
-      {post.comments &&
-        post.comments.map((comment: Comment, index: number) => (
-          <div key={index}>
-            <p>{comment.text}</p>
-            <p>Posted by {comment.username}</p>
-            <button onClick={() => handleLikeComment(comment._id)}>
-              Like ({comment.likes.length})
-            </button>
-            <button onClick={() => handleDislikeComment(comment._id)}>
-              Dislike ({comment.dislikes.length})
-            </button>
-            {(currentUser.id === comment.userId ||
-              currentUser.id === post.userId._id) && (
-              <button onClick={() => handleDeleteComment(comment._id)}>
-                Delete Comment
+    <main className="postIdMain">
+      <Header />
+      <div>
+        <h2>{post.title}</h2>
+        <p>{post.content}</p>
+        <p>Posted by {post.userId.username}</p>
+        {post.userId._id === currentUser.id && (
+          <button onClick={deletePost}>Delete Post</button>
+        )}
+        <form onSubmit={handleCommentSubmit}>
+          <input
+            type="text"
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Write a comment"
+          />
+          <button type="submit">Submit Comment</button>
+        </form>
+        {post.comments &&
+          post.comments.map((comment: Comment, index: number) => (
+            <div key={index}>
+              <p>{comment.text}</p>
+              <p>Posted by {comment.username}</p>
+              <button onClick={() => handleLikeComment(comment._id)}>
+                Like ({comment.likes.length})
               </button>
-            )}
-          </div>
-        ))}
-    </div>
-  )};
+              <button onClick={() => handleDislikeComment(comment._id)}>
+                Dislike ({comment.dislikes.length})
+              </button>
+              {(currentUser.id === comment.userId ||
+                currentUser.id === post.userId._id) && (
+                <button onClick={() => handleDeleteComment(comment._id)}>
+                  Delete Comment
+                </button>
+              )}
+            </div>
+          ))}
+      </div>
+    </main>
+  );
+};
 
 export default PostPage;
