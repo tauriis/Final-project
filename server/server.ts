@@ -4,11 +4,17 @@ import connectDB from "../server/db";
 import { notFound, errorHandler } from "./middlewares/ErrorMiddleware";
 import UserRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
+import commentRoutes from './routes/commentRoutes';
 import cors from "cors";
 
 const app: Application = express();
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 dotenv.config();
 
@@ -28,6 +34,9 @@ app.use("/api", UserRoutes);
 
 // Post Route
 app.use("/api", postRoutes);
+
+// Comment Route
+app.use("/api", commentRoutes);
 
 // Middleware
 app.use(notFound);

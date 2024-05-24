@@ -1,20 +1,25 @@
-import { Request, Response } from "express";
+import { Request as ExpressRequest, Response } from "express";
 import Post from "../modules/posts";
 
 interface UserPayload {
+  _id: string;
   id: string;
   email: string;
   username: string;
 }
 
-interface RequestWithUser extends Request {
+interface Request extends ExpressRequest {
   user: UserPayload;
 }
 
 export const createPost = async (req: Request, res: Response) => {
-  const reqWithUser = req as RequestWithUser;
-  const { title, content } = reqWithUser.body;
-  const userId = reqWithUser.user.id;
+  const { title, content } = req.body;
+
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const userId = req.user._id;
 
   try {
     const post = new Post({
@@ -26,8 +31,10 @@ export const createPost = async (req: Request, res: Response) => {
     const savedPost = await post.save();
 
     res.json(savedPost);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred while creating the post", error });
   }
 };
 
@@ -56,16 +63,30 @@ export const getPostById = async (req: Request, res: Response) => {
   }
 };
 
-export const deletePost = async (req, res) => {
+export const deletePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   try {
-    const post = await Post.findByIdAndDelete(req.params.id);
+    const post = await Post.findById(id);
 
     if (!post) {
-      return res.status(404).json({ message: 'No post found with this id' });
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    res.json({ message: 'Post deleted successfully' });
+    if (post.userId.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "You do not have permission to delete this post" });
+    }
+
+    await Post.deleteOne({ _id: id });
+
+    res.json({ message: "Post deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 };

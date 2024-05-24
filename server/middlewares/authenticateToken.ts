@@ -2,14 +2,15 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../modules/users";
 
-interface UserPayload {
-  id: string;
-  email: string;
-  username: string;
-}
-
-interface RequestWithUser extends Request {
-  user: UserPayload;
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      _id: string;
+      id: string;
+      email: string;
+      username: string;
+    };
+  }
 }
 
 export const authenticateToken = async (
@@ -17,37 +18,24 @@ export const authenticateToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "No token provided" });
-  }
+  if (token == null) return res.sendStatus(401);
 
-  const token = authHeader.split(" ")[1];
+  jwt.verify(token, process.env.JWT_SECRET as string, async (err: any, user: any) => {
+    if (err) return res.sendStatus(403);
 
-  const secret = process.env.JWT_SECRET;
+    const fullUser = await User.findById(user.id);
+    if (!fullUser) return res.sendStatus(404);
 
-  if (!secret) {
-    return res.status(500).json({ error: "JWT_SECRET is not defined" });
-  }
-
-  try {
-    const decodedToken = jwt.verify(token, secret) as UserPayload;
-
-    const user = await User.findById(decodedToken.id);
-
-    if (!user) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-
-    (req as RequestWithUser).user = {
-      id: String(user._id),
-      email: user.email,
-      username: user.username,
+    req.user = {
+      _id: String(fullUser._id),
+      id: String(fullUser._id),
+      email: fullUser.email,
+      username: fullUser.username,
     };
 
     next();
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  });
 };
