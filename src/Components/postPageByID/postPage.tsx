@@ -3,8 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 interface Comment {
+  _id: string;
   text: string;
   username: string;
+  userId: string;
 }
 
 interface Post {
@@ -109,6 +111,33 @@ const PostPage = () => {
   console.log("Post User ID:", post.userId._id);
   console.log("Current User ID:", currentUser.id);
 
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(
+        `http://localhost:5000/api/posts/${id}/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const response = await axios.get(
+        `http://localhost:5000/api/posts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setPost(response.data);
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   return (
     <div>
       <h2>{post.title}</h2>
@@ -131,6 +160,12 @@ const PostPage = () => {
           <div key={index}>
             <p>{comment.text}</p>
             <p>Posted by {comment.username}</p>
+            {(currentUser.id === comment.userId ||
+              currentUser.id === post.userId._id) && (
+              <button onClick={() => handleDeleteComment(comment._id)}>
+                Delete Comment
+              </button>
+            )}
           </div>
         ))}
     </div>

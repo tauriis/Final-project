@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 interface IComment {
   text: string;
   username: string;
+  userId: mongoose.Types.ObjectId;
 }
 
 interface IPost extends Document {
@@ -16,7 +17,7 @@ const PostSchema: Schema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  comments: [{ text: String, username: String }],
+  comments: [{ text: String, username: String, userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" } }], // Modify this line
 }, {
   timestamps: true,
 });
