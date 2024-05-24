@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
-import Header from "../../Components/Header/header";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Header from '../../Components/Header/header';
+import { Link } from 'react-router-dom';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Post {
   _id: string;
@@ -13,10 +13,12 @@ interface Post {
     username: string;
   };
   createdAt: string | null;
+  comments: any[];
 }
 
 const AllPostsPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [filter, setFilter] = useState(localStorage.getItem('filter') || 'default');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -38,11 +40,27 @@ const AllPostsPage = () => {
     fetchPosts();
   }, []);
 
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(e.target.value);
+    localStorage.setItem('filter', e.target.value);
+  };
+
+  const filteredPosts = posts.filter(post => {
+    if (filter === 'answered') {
+      return post.comments && post.comments.length > 0;
+    }
+    return true;
+  });
+
   return (
     <main className="allPostsMain">
       <Header />
       <div>
-        {posts.map((post) => (
+        <select value={filter} onChange={handleFilterChange}>
+          <option value="default">Default</option>
+          <option value="answered">Answered</option>
+        </select>
+        {filteredPosts.map((post) => (
           <div key={post._id}>
             <Link to={`/posts/${post._id}`}>
               <h2>{post.title}</h2>
