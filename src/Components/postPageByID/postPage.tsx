@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../Header/header";
@@ -16,6 +16,7 @@ interface Post {
   _id: string;
   title: string;
   content: string;
+  views: number;
   userId: {
     _id: string;
     username: string;
@@ -24,31 +25,57 @@ interface Post {
 }
 
 const PostPage = () => {
+  console.log("Rendering PostPage component");
   const { id } = useParams();
-  const [post, setPost] = useState<Post | null>(null);
+  const postRef = useRef<Post | null>(null);
+  const [render, setRender] = useState(false);
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
 
+  const fetchPost = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `http://localhost:5000/api/posts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      postRef.current = response.data;
+      setRender((prev) => !prev);
+    } catch (err) {
+      console.error("Error fetching post:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchPost = async () => {
+    fetchPost();
+  }, [id]);
+
+  useEffect(() => {
+    console.log("Running incrementViewCount useEffect hook");
+    const incrementViewCount = async () => {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await axios.get(
-          `http://localhost:5000/api/posts/${id}`,
+        await axios.put(
+          `http://localhost:5000/api/posts/${id}/views`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setPost(response.data);
-      } catch (err) {
-        console.error("Error fetching post:", err);
+      } catch (error) {
+        console.error("Error incrementing view count:", error);
       }
     };
 
-    fetchPost();
+    incrementViewCount();
   }, [id]);
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,15 +102,7 @@ const PostPage = () => {
         }
       );
 
-      const response = await axios.get(
-        `http://localhost:5000/api/posts/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPost(response.data);
+      await fetchPost();
 
       setComment("");
     } catch (error) {
@@ -105,13 +124,13 @@ const PostPage = () => {
     }
   };
 
-  if (!post) {
+  if (!postRef.current) {
     return <div>Loading...</div>;
   }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
-  console.log("Post User ID:", post.userId._id);
+  console.log("Post User ID:", postRef.current.userId._id);
   console.log("Current User ID:", currentUser.id);
 
   const handleDeleteComment = async (commentId: string) => {
@@ -127,15 +146,7 @@ const PostPage = () => {
         }
       );
 
-      const response = await axios.get(
-        `http://localhost:5000/api/posts/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPost(response.data);
+      await fetchPost();
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -155,15 +166,7 @@ const PostPage = () => {
         }
       );
 
-      const response = await axios.get(
-        `http://localhost:5000/api/posts/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPost(response.data);
+      await fetchPost();
     } catch (error) {
       console.error("Error liking comment:", error);
     }
@@ -183,15 +186,7 @@ const PostPage = () => {
         }
       );
 
-      const response = await axios.get(
-        `http://localhost:5000/api/posts/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPost(response.data);
+      await fetchPost();
     } catch (error) {
       console.error("Error disliking comment:", error);
     }
@@ -201,10 +196,11 @@ const PostPage = () => {
     <main className="postIdMain">
       <Header />
       <div>
-        <h2>{post.title}</h2>
-        <p>{post.content}</p>
-        <p>Posted by {post.userId.username}</p>
-        {post.userId._id === currentUser.id && (
+        <h2>{postRef.current.title}</h2>
+        <p>{postRef.current.content}</p>
+        <p>Posted by {postRef.current.userId.username}</p>
+        <p>Views: {postRef.current.views}</p>
+        {postRef.current.userId._id === currentUser.id && (
           <button onClick={deletePost}>Delete Post</button>
         )}
         <form onSubmit={handleCommentSubmit}>
@@ -216,8 +212,8 @@ const PostPage = () => {
           />
           <button type="submit">Submit Comment</button>
         </form>
-        {post.comments &&
-          post.comments.map((comment: Comment, index: number) => (
+        {postRef.current.comments &&
+          postRef.current.comments.map((comment: Comment, index: number) => (
             <div key={index}>
               <p>{comment.text}</p>
               <p>Posted by {comment.username}</p>
@@ -228,7 +224,8 @@ const PostPage = () => {
                 Dislike ({comment.dislikes.length})
               </button>
               {(currentUser.id === comment.userId ||
-                currentUser.id === post.userId._id) && (
+                (postRef.current &&
+                  currentUser.id === postRef.current.userId._id)) && (
                 <button onClick={() => handleDeleteComment(comment._id)}>
                   Delete Comment
                 </button>

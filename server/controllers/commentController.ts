@@ -1,7 +1,8 @@
 import { Request as ExpressRequest, Response } from "express";
-import Comment from "../modules/comments";
 import Post from "../modules/posts";
 import User from "../modules/users";
+import mongoose from "mongoose";
+import { IComment } from "../modules/posts";
 
 interface UserPayload {
   _id: string;
@@ -28,39 +29,39 @@ export const createComment = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "User not found" });
   }
 
-  const comment = new Comment({
-    text: req.body.text,
+  const comment: Partial<IComment> = {
+    text: text,
     username: user.username,
-    post: postId,
-    user: req.user._id,
+    userId: new mongoose.Types.ObjectId(req.user._id),
     likes: [],
     dislikes: [],
-  });
+  };
 
-  await comment.save();
-
-  post.comments.push({
-    text: comment.text,
-    username: comment.username,
-    userId: comment.user,
-    likes: [],
-    dislikes: [],
-  });
+  post.comments.push(comment as IComment);
 
   await post.save();
 
-  res.json(post);
+  return res.status(201).json({ message: "Comment created", comment });
 };
 
 export const getAllCommentsForPost = async (req: Request, res: Response) => {
   const { postId } = req.params;
-  const comments = await Comment.find({ post: postId });
-  res.json(comments);
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  res.json(post.comments);
 };
 
 export const getCommentById = async (req: Request, res: Response) => {
-  const { commentId } = req.params;
-  const comment = await Comment.findById(commentId);
+  const { postId, commentId } = req.params;
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  const comment = (post.comments as mongoose.Types.DocumentArray<IComment>).id(
+    commentId
+  );
   if (!comment) {
     return res.status(404).json({ message: "Comment not found" });
   }
@@ -75,26 +76,23 @@ export const deleteComment = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  const commentIndex = post.comments.findIndex(
-    (c: any) => c._id.toString() === commentId
+  const comment = (post.comments as mongoose.Types.DocumentArray<IComment>).id(
+    commentId
   );
-  if (commentIndex === -1) {
+  if (!comment) {
     return res.status(404).json({ message: "Comment not found" });
   }
 
-  const comment = post.comments[commentIndex] as any;
-
-  if (
-    req.user._id.toString() !== comment.userId.toString() &&
-    req.user._id.toString() !== post.userId.toString()
-  ) {
+  const userId = new mongoose.Types.ObjectId(req.user._id);
+  if (!userId.equals(comment.userId) && !userId.equals(post.userId)) {
     return res
       .status(403)
       .json({ message: "You do not have permission to delete this comment" });
   }
 
-  post.comments.splice(commentIndex, 1);
-
+  post.comments = post.comments.filter(
+    (c: any) => c._id.toString() !== commentId
+  );
   await post.save();
 
   res.json({ message: "Comment deleted" });
@@ -108,28 +106,22 @@ export const likeComment = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  const commentIndex = post.comments.findIndex(
-    (c: any) => c._id.toString() === commentId
+  const comment = (post.comments as mongoose.Types.DocumentArray<IComment>).id(
+    commentId
   );
-  if (commentIndex === -1) {
+  if (!comment) {
     return res.status(404).json({ message: "Comment not found" });
   }
 
-  const comment = post.comments[commentIndex] as any;
-
-
-  if (comment.likes.includes(req.user._id)) {
-    comment.likes = comment.likes.filter(
-      (id: any) => id.toString() !== req.user._id.toString()
-    );
+  const userId = new mongoose.Types.ObjectId(req.user._id);
+  const index = comment.likes.findIndex((id) => id.equals(userId));
+  if (index > -1) {
+    comment.likes.splice(index, 1);
   } else {
-
-    comment.likes.push(req.user._id);
-
-    if (comment.dislikes.includes(req.user._id)) {
-      comment.dislikes = comment.dislikes.filter(
-        (id: any) => id.toString() !== req.user._id.toString()
-      );
+    comment.likes.push(userId);
+    const dislikeIndex = comment.dislikes.findIndex((id) => id.equals(userId));
+    if (dislikeIndex > -1) {
+      comment.dislikes.splice(dislikeIndex, 1);
     }
   }
 
@@ -146,28 +138,22 @@ export const dislikeComment = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  const commentIndex = post.comments.findIndex(
-    (c: any) => c._id.toString() === commentId
+  const comment = (post.comments as mongoose.Types.DocumentArray<IComment>).id(
+    commentId
   );
-  if (commentIndex === -1) {
+  if (!comment) {
     return res.status(404).json({ message: "Comment not found" });
   }
 
-  const comment = post.comments[commentIndex] as any;
-
-  if (comment.dislikes.includes(req.user._id)) {
-
-    comment.dislikes = comment.dislikes.filter(
-      (id: any) => id.toString() !== req.user._id.toString()
-    );
+  const userId = new mongoose.Types.ObjectId(req.user._id);
+  const index = comment.dislikes.findIndex((id) => id.equals(userId));
+  if (index > -1) {
+    comment.dislikes.splice(index, 1);
   } else {
-
-    comment.dislikes.push(req.user._id);
-
-    if (comment.likes.includes(req.user._id)) {
-      comment.likes = comment.likes.filter(
-        (id: any) => id.toString() !== req.user._id.toString()
-      );
+    comment.dislikes.push(userId);
+    const likeIndex = comment.likes.findIndex((id) => id.equals(userId));
+    if (likeIndex > -1) {
+      comment.likes.splice(likeIndex, 1);
     }
   }
 

@@ -1,5 +1,6 @@
 import { Request as ExpressRequest, Response } from "express";
 import Post from "../modules/posts";
+import mongoose from "mongoose";
 
 interface UserPayload {
   _id: string;
@@ -88,5 +89,23 @@ export const deletePost = async (req: Request, res: Response) => {
     res.json({ message: "Post deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+export const incrementViewCount = async (req: Request, res: Response) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user._id);
+    const post = await Post.findOneAndUpdate(
+      { _id: req.params.id, viewedBy: { $ne: userId } },
+      { $addToSet: { viewedBy: userId }, $inc: { views: 1 } },
+      { new: true }
+    );
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+    // Send the view count
+    res.send({ viewCount: post.views });
+  } catch (err) {
+    res.status(500).send(err);
   }
 };

@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IComment {
+export interface IComment extends mongoose.Document {
   text: string;
   username: string;
   userId: mongoose.Types.ObjectId;
@@ -13,6 +13,8 @@ interface IPost extends Document {
   content: string;
   userId: string;
   comments: IComment[];
+  views: number;
+  viewedBy: mongoose.Types.ObjectId[];
 }
 
 const PostSchema: Schema = new Schema({
@@ -25,7 +27,9 @@ const PostSchema: Schema = new Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
-  }], 
+  }],
+  views: { type: Number, default: 0 },
+  viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 }, {
   timestamps: true,
 });
