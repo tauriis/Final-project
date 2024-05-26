@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "../Header/header";
 
 const CreatePost = () => {
+  console.log("Rendering CreatePost component");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 

@@ -5,11 +5,6 @@ import "./homePage.css";
 import Header from "../../Components/Header/header";
 import { formatDistanceToNow } from "date-fns";
 
-// interface User {
-//   _id: string;
-//   username: string;
-// }
-
 interface Post {
   _id: string;
   title: string;
@@ -19,6 +14,7 @@ interface Post {
     username: string;
   };
   createdAt: string | null;
+  views: number;
 }
 
 const HomePage = () => {
@@ -35,7 +31,6 @@ const HomePage = () => {
           },
         });
 
-        // Get the last 3 posts
         const lastThreePosts = response.data.slice(-3);
 
         setPosts(lastThreePosts);
@@ -61,6 +56,7 @@ const HomePage = () => {
                   <p>{post.content}</p>
                 </Link>
                 <p>Posted by {post.userId.username}</p>
+                <p>Views: {post.views}</p>
                 {post.createdAt && (
                   <p>{formatDistanceToNow(new Date(post.createdAt))} ago</p>
                 )}

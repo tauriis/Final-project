@@ -44,7 +44,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
     const posts = await Post.find().populate("userId", "username");
     res.json(posts);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
@@ -60,7 +60,7 @@ export const getPostById = async (req: Request, res: Response) => {
       res.status(404).json({ message: "Post not found" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: (err as Error).message });
   }
 };
 
@@ -88,24 +88,35 @@ export const deletePost = async (req: Request, res: Response) => {
 
     res.json({ message: "Post deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: (err as Error).message });
   }
 };
 
 export const incrementViewCount = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
   try {
-    const userId = new mongoose.Types.ObjectId(req.user._id);
-    const post = await Post.findOneAndUpdate(
-      { _id: req.params.id, viewedBy: { $ne: userId } },
-      { $addToSet: { viewedBy: userId }, $inc: { views: 1 } },
-      { new: true }
-    );
+    const post = await Post.findById(id);
+
     if (!post) {
-      return res.status(404).send("Post not found");
+      return res.status(404).json({ message: "Post not found" });
     }
-    // Send the view count
-    res.send({ viewCount: post.views });
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = new mongoose.Types.ObjectId(req.user._id);
+    if (post.viewedBy.some((id) => id.equals(userId))) {
+      return res.json({ viewCount: post.views });
+    }
+
+    post.viewedBy.push(userId);
+    post.views += 1;
+    await post.save();
+
+    res.json({ viewCount: post.views });
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).json({ message: (err as Error).message });
   }
 };

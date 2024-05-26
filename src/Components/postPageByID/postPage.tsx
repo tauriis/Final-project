@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../Header/header";
@@ -27,8 +27,7 @@ interface Post {
 const PostPage = () => {
   console.log("Rendering PostPage component");
   const { id } = useParams();
-  const postRef = useRef<Post | null>(null);
-  const [render, setRender] = useState(false);
+  const [post, setPost] = useState<Post | null>(null);
   const navigate = useNavigate();
   const [comment, setComment] = useState("");
 
@@ -44,8 +43,18 @@ const PostPage = () => {
           },
         }
       );
-      postRef.current = response.data;
-      setRender((prev) => !prev);
+      setPost(response.data);
+
+      // view count
+      await axios.put(
+        `http://localhost:5000/api/posts/${id}/views`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } catch (err) {
       console.error("Error fetching post:", err);
     }
@@ -53,29 +62,6 @@ const PostPage = () => {
 
   useEffect(() => {
     fetchPost();
-  }, [id]);
-
-  useEffect(() => {
-    console.log("Running incrementViewCount useEffect hook");
-    const incrementViewCount = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        await axios.put(
-          `http://localhost:5000/api/posts/${id}/views`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error incrementing view count:", error);
-      }
-    };
-
-    incrementViewCount();
   }, [id]);
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,14 +110,11 @@ const PostPage = () => {
     }
   };
 
-  if (!postRef.current) {
+  if (!post) {
     return <div>Loading...</div>;
   }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-
-  console.log("Post User ID:", postRef.current.userId._id);
-  console.log("Current User ID:", currentUser.id);
 
   const handleDeleteComment = async (commentId: string) => {
     try {
@@ -196,11 +179,11 @@ const PostPage = () => {
     <main className="postIdMain">
       <Header />
       <div>
-        <h2>{postRef.current.title}</h2>
-        <p>{postRef.current.content}</p>
-        <p>Posted by {postRef.current.userId.username}</p>
-        <p>Views: {postRef.current.views}</p>
-        {postRef.current.userId._id === currentUser.id && (
+        <h2>{post.title}</h2>
+        <p>{post.content}</p>
+        <p>Posted by {post.userId.username}</p>
+        <p>Views: {post.views}</p>
+        {post.userId._id === currentUser.id && (
           <button onClick={deletePost}>Delete Post</button>
         )}
         <form onSubmit={handleCommentSubmit}>
@@ -212,8 +195,8 @@ const PostPage = () => {
           />
           <button type="submit">Submit Comment</button>
         </form>
-        {postRef.current.comments &&
-          postRef.current.comments.map((comment: Comment, index: number) => (
+        {post.comments &&
+          post.comments.map((comment: Comment, index: number) => (
             <div key={index}>
               <p>{comment.text}</p>
               <p>Posted by {comment.username}</p>
@@ -224,8 +207,7 @@ const PostPage = () => {
                 Dislike ({comment.dislikes.length})
               </button>
               {(currentUser.id === comment.userId ||
-                (postRef.current &&
-                  currentUser.id === postRef.current.userId._id)) && (
+                (post && currentUser.id === post.userId._id)) && (
                 <button onClick={() => handleDeleteComment(comment._id)}>
                   Delete Comment
                 </button>
@@ -237,4 +219,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default React.memo(PostPage);
