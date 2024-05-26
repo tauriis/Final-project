@@ -1,6 +1,7 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 interface LoginProps {
   onLogin: () => void;
@@ -10,19 +11,29 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error(
+      "AuthContext is undefined, please verify the context provider."
+    );
+  }
+
+  const { setToken } = authContext;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post("http://localhost:5000/api/auth", {
         email,
         password,
       });
-  
+
       localStorage.setItem("currentUser", JSON.stringify(response.data.user));
       localStorage.setItem("token", response.data.token);
-  
+      setToken(response.data.token);
+
       onLogin();
       navigate("/");
     } catch (error) {

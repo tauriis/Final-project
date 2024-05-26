@@ -12,16 +12,8 @@ import { authenticateToken } from "../middlewares/authenticateToken";
 const router = Router();
 
 router.post("/posts/:postId/comments", authenticateToken, createComment as any);
-router.get(
-  "/posts/:postId/comments",
-  authenticateToken,
-  getAllCommentsForPost as any
-);
-router.get(
-  "/posts/:postId/comments/:commentId",
-  authenticateToken,
-  getCommentById as any
-);
+router.get("/posts/:postId/comments", getAllCommentsForPost as any);
+router.get("/posts/:postId/comments/:commentId", getCommentById as any);
 router.delete(
   "/posts/:postId/comments/:commentId",
   authenticateToken,

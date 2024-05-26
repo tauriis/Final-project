@@ -4,7 +4,7 @@ import "./homePage.css";
 import Header from "../../Components/Header/header";
 import Sidebar from "../../Components/SideBar/sideBar";
 import PostItem from "../../Components/PostItem/PostItem";
-import { Post } from "../../types"
+import { Post } from "../../types";
 
 const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -13,11 +13,18 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/posts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const config = token
+          ? {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          : {};
+
+        const response = await axios.get(
+          "http://localhost:5000/api/posts",
+          config
+        );
 
         const lastThreePosts = response.data.slice(-3);
 
@@ -38,7 +45,7 @@ const HomePage = () => {
         <section>
           <h2>Recent posts</h2>
           <ul>
-          {posts.map((post) => (
+            {posts.map((post) => (
               <PostItem key={post._id} post={post} />
             ))}
           </ul>

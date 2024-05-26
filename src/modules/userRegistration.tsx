@@ -1,5 +1,6 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 interface RegisterProps {
   onLogin: () => void;
@@ -9,6 +10,16 @@ const Register: React.FC<RegisterProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error(
+      "AuthContext is undefined, please verify the context provider."
+    );
+  }
+
+  const { setToken } = authContext;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,8 +31,9 @@ const Register: React.FC<RegisterProps> = ({ onLogin }) => {
         password,
       });
 
-      localStorage.setItem("currentUser", response.data.user.id);
+      localStorage.setItem("currentUser", JSON.stringify(response.data.user));
       localStorage.setItem("token", response.data.token);
+      setToken(response.data.token);
 
       onLogin();
     } catch (error) {

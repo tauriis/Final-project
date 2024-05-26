@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Header from "../../Components/Header/header";
 import PostItem from "../../Components/PostItem/PostItem";
-import { Post } from "../../types"
+import { Post } from "../../types";
 
 const TagPage = () => {
   const { tag } = useParams<{ tag: string }>();
@@ -12,11 +12,8 @@ const TagPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const token = localStorage.getItem("token");
-
         const response = await axios.get(
-          `http://localhost:5000/api/posts/tag/${tag}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          `http://localhost:5000/api/posts/tag/${tag}`
         );
         setPosts(response.data);
       } catch (err) {
@@ -34,9 +31,9 @@ const TagPage = () => {
         <h2>Posts tagged with "{tag}"</h2>
         <ul>
           {posts.map((post) => (
-              <PostItem key={post._id} post={post} />
-            ))}
-          </ul>
+            <PostItem key={post._id} post={post} />
+          ))}
+        </ul>
       </main>
     </>
   );
