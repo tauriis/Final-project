@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import "./homePage.css";
 import Header from "../../Components/Header/header";
-import { formatDistanceToNow } from "date-fns";
-
-interface Post {
-  _id: string;
-  title: string;
-  content: string;
-  userId: {
-    _id: string;
-    username: string;
-  };
-  createdAt: string | null;
-  views: number;
-}
+import Sidebar from "../../Components/SideBar/sideBar";
+import PostItem from "../../Components/PostItem/PostItem";
+import { Post } from "../../types"
 
 const HomePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -24,7 +13,6 @@ const HomePage = () => {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("token");
-
         const response = await axios.get("http://localhost:5000/api/posts", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,22 +33,13 @@ const HomePage = () => {
   return (
     <>
       <Header />
+      <Sidebar />
       <main className="homeMain">
         <section>
           <h2>Recent posts</h2>
           <ul>
-            {posts.map((post) => (
-              <li key={post._id}>
-                <Link to={`/posts/${post._id}`}>
-                  <h3>{post.title}</h3>
-                  <p>{post.content}</p>
-                </Link>
-                <p>Posted by {post.userId.username}</p>
-                <p>Views: {post.views}</p>
-                {post.createdAt && (
-                  <p>{formatDistanceToNow(new Date(post.createdAt))} ago</p>
-                )}
-              </li>
+          {posts.map((post) => (
+              <PostItem key={post._id} post={post} />
             ))}
           </ul>
         </section>

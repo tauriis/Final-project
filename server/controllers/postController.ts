@@ -14,7 +14,7 @@ interface Request extends ExpressRequest {
 }
 
 export const createPost = async (req: Request, res: Response) => {
-  const { title, content } = req.body;
+  const { title, content, tag } = req.body;
 
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -27,6 +27,7 @@ export const createPost = async (req: Request, res: Response) => {
       title,
       content,
       userId,
+      tags: [tag],
     });
 
     const savedPost = await post.save();
@@ -61,6 +62,16 @@ export const getPostById = async (req: Request, res: Response) => {
     }
   } catch (err) {
     res.status(500).json({ message: (err as Error).message });
+  }
+};
+
+export const getPostsByTag = async (req: Request, res: Response) => {
+  try {
+    const posts = await Post.find({ tags: { $in: [req.params.tag] } });
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching posts" });
   }
 };
 

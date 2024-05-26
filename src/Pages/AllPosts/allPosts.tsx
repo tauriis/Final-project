@@ -3,18 +3,7 @@ import axios from "axios";
 import Header from "../../Components/Header/header";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-
-interface Post {
-  _id: string;
-  title: string;
-  content: string;
-  userId: {
-    _id: string;
-    username: string;
-  };
-  createdAt: string | null;
-  comments: any[];
-}
+import { Post } from "../../types"
 
 const AllPostsPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);

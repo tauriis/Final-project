@@ -2,30 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../Header/header";
-
-interface Comment {
-  _id: string;
-  text: string;
-  username: string;
-  userId: string;
-  likes: string[];
-  dislikes: string[];
-}
-
-interface Post {
-  _id: string;
-  title: string;
-  content: string;
-  userId: {
-    _id: string;
-    username: string;
-  };
-  createdAt: string | null;
-  views: number;
-  likes: string[];
-  dislikes: string[];
-  comments: Comment[];
-}
+import { Post } from "../../types"
+import { Comment } from "../../types"
 
 const PostPage = () => {
   console.log("Rendering PostPage component");
@@ -224,6 +202,9 @@ const PostPage = () => {
       <div>
         <h2>{post.title}</h2>
         <p>{post.content}</p>
+        {post.tags && post.tags.map((tag, index) => (
+          <p key={index}>Tag: {tag}</p>
+        ))}
         <p>Posted by {post.userId.username}</p>
         <p>Views: {post.views}</p>
         <button onClick={handleLikePost}>Like ({post.likes.length})</button>

@@ -6,6 +6,9 @@ const CreatePost = () => {
   console.log("Rendering CreatePost component");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
+
+  const availableTags = ["Technology", "Lifestyle", "Sports", "Business", "Education", "Health & Fitness", "Entertainment", "Politics", "Music"];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +18,7 @@ const CreatePost = () => {
 
       const response = await axios.post(
         "http://localhost:5000/api/posts",
-        { title, content },
+        { title, content, tag },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,6 +47,18 @@ const CreatePost = () => {
           onChange={(e) => setContent(e.target.value)}
           placeholder="Content"
         />
+        <select
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+          required
+        >
+          <option value="">Select a tag</option>
+          {availableTags.map((availableTag) => (
+            <option value={availableTag} key={availableTag}>
+              {availableTag}
+            </option>
+          ))}
+        </select>
         <button type="submit">Create Post</button>
       </form>
     </main>

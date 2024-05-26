@@ -17,6 +17,7 @@ interface IPost extends Document {
   viewedBy: mongoose.Types.ObjectId[];
   likes: mongoose.Types.ObjectId[];
   dislikes: mongoose.Types.ObjectId[];
+  tags: string[];
 }
 
 const PostSchema: Schema = new Schema({
@@ -34,6 +35,7 @@ const PostSchema: Schema = new Schema({
   dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   views: { type: Number, default: 0 },
   viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  tags: { type: [String], default: [] },
 }, {
   timestamps: true,
 });
