@@ -9,16 +9,6 @@ import {
 } from "../controllers/commentController";
 import { authenticateToken } from "../middlewares/authenticateToken";
 
-interface UserPayload {
-  _id: string;
-  email: string;
-  username: string;
-}
-
-interface Request extends Express.Request {
-  user: UserPayload;
-}
-
 const router = Router();
 
 router.post("/posts/:postId/comments", authenticateToken, createComment as any);

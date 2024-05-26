@@ -120,3 +120,73 @@ export const incrementViewCount = async (req: Request, res: Response) => {
     res.status(500).json({ message: (err as Error).message });
   }
 };
+
+export const likePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = new mongoose.Types.ObjectId(req.user._id);
+    const likeIndex = post.likes.findIndex((id) => id.equals(userId));
+    const dislikeIndex = post.dislikes.findIndex((id) => id.equals(userId));
+
+    if (likeIndex === -1) {
+      post.likes.push(userId);
+      if (dislikeIndex !== -1) {
+        post.dislikes.splice(dislikeIndex, 1);
+      }
+    } else {
+      post.likes.splice(likeIndex, 1);
+    }
+
+    await post.save();
+
+    res.json({ likes: post.likes, dislikes: post.dislikes });
+  } catch (err) {
+    res.status(500).json({ message: (err as Error).message });
+  }
+};
+
+export const dislikePost = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = new mongoose.Types.ObjectId(req.user._id);
+    const likeIndex = post.likes.findIndex((id) => id.equals(userId));
+    const dislikeIndex = post.dislikes.findIndex((id) => id.equals(userId));
+
+    if (dislikeIndex === -1) {
+      post.dislikes.push(userId);
+      if (likeIndex !== -1) {
+        post.likes.splice(likeIndex, 1);
+      }
+    } else {
+      post.dislikes.splice(dislikeIndex, 1);
+    }
+
+    await post.save();
+
+    res.json({ likes: post.likes, dislikes: post.dislikes });
+  } catch (err) {
+    res.status(500).json({ message: (err as Error).message });
+  }
+};

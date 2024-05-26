@@ -16,11 +16,14 @@ interface Post {
   _id: string;
   title: string;
   content: string;
-  views: number;
   userId: {
     _id: string;
     username: string;
   };
+  createdAt: string | null;
+  views: number;
+  likes: string[];
+  dislikes: string[];
   comments: Comment[];
 }
 
@@ -175,6 +178,46 @@ const PostPage = () => {
     }
   };
 
+  const handleLikePost = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        `http://localhost:5000/api/posts/${id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchPost();
+    } catch (err) {
+      console.error("Error liking post:", err);
+    }
+  };
+
+  const handleDislikePost = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.put(
+        `http://localhost:5000/api/posts/${id}/dislike`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchPost();
+    } catch (err) {
+      console.error("Error disliking post:", err);
+    }
+  };
+
   return (
     <main className="postIdMain">
       <Header />
@@ -183,6 +226,10 @@ const PostPage = () => {
         <p>{post.content}</p>
         <p>Posted by {post.userId.username}</p>
         <p>Views: {post.views}</p>
+        <button onClick={handleLikePost}>Like ({post.likes.length})</button>
+        <button onClick={handleDislikePost}>
+          Dislike ({post.dislikes.length})
+        </button>
         {post.userId._id === currentUser.id && (
           <button onClick={deletePost}>Delete Post</button>
         )}

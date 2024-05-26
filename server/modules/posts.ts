@@ -15,6 +15,8 @@ interface IPost extends Document {
   comments: IComment[];
   views: number;
   viewedBy: mongoose.Types.ObjectId[];
+  likes: mongoose.Types.ObjectId[];
+  dislikes: mongoose.Types.ObjectId[];
 }
 
 const PostSchema: Schema = new Schema({
@@ -28,6 +30,8 @@ const PostSchema: Schema = new Schema({
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
   }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   views: { type: Number, default: 0 },
   viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 }, {
