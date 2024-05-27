@@ -1,0 +1,79 @@
+.container {
+  display: flex;
+}
+.container .main-content .post-item-list {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.container .main-content .post-item-list .post-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  list-style: none;
+  padding: 20px;
+  background-color: #f8c794;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+.container .main-content .post-item-list .post-item:hover {
+  scale: 1.01;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.container .main-content .post-item-list .post-item .post-link {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  margin-left: 30px;
+  width: 550px;
+  border: 1px solid rgba(75, 44, 32, 0.3);
+  padding: 10px;
+  border-radius: 5px;
+}
+.container .main-content .post-item-list .post-item .post-link .post-author {
+  font-size: 0.9rem;
+}
+.container .main-content .post-item-list .post-item .post-link .post-author .username {
+  font-weight: bold;
+}
+.container .main-content .post-item-list .post-item .post-link .post-title {
+  color: #4b2c20;
+  font-size: 24px;
+}
+.container .main-content .post-item-list .post-item .post-link .post-content-wrapper {
+  width: 100%;
+}
+.container .main-content .post-item-list .post-item .post-link .post-content-wrapper .post-content {
+  color: #4b2c20;
+  font-size: 14px;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.2;
+}
+.container .main-content .post-item-list .post-metrics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  font-weight: bolder;
+  color: #4b2c20;
+  font-size: 14px;
+}
+
+.main-content {
+  order: 2;
+  flex-grow: 1;
+  margin-left: 15%;
+  min-height: 69vh;
+}
+.main-content .tag-title {
+  margin: 20px 0 20px 0;
+}/*# sourceMappingURL=tagPage.css.map */

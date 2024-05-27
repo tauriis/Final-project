@@ -1,0 +1,140 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $primary-bg-color;
+  color: $primary-text-color;
+  padding: 10px 30px;
+  font-family: "Titillium Web", sans-serif;
+  border-bottom: 3px solid $primary-text-color;
+
+  .logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+
+    .logo-link {
+      color: rgba(0, 0, 0, 0.671);
+      text-decoration: none;
+    }
+  }
+
+  .navigation {
+    .nav-item,
+    .dropdown {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+      font-size: 1.1rem;
+
+      #login {
+        font-weight: bold;
+        font-size: 1.25rem;
+      }
+
+      .nav-item {
+        .nav-link {
+          @include link-hover-style;
+        }
+      }
+
+      .dropdown {
+        position: relative;
+
+        .dropdown-toggle {
+          cursor: pointer;
+          position: relative;
+          display: flex;
+
+          .username {
+            color: $primary-text-color;
+            font-weight: bold;
+            padding: 3px 5px 3px 5px;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            font-size: 1.5rem;
+
+            &:hover {
+              background-color: rgba($text-bg-color, 0.7);
+              border-radius: 5px;
+            }
+          }
+
+          &.open {
+            .username {
+              background-color: rgba($secondary-bg-color, 0.8);
+            }
+          }
+        }
+
+        .dropdown-menu {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background-color: rgba($secondary-bg-color, 0.85);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+          gap: 5px;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+          padding-top: 10px;
+          justify-content: space-evenly;
+          align-items: center;
+          opacity: 0;
+          transform: scaleY(0);
+          transition: opacity 0.2s ease-in-out, transform 0.15s ease-in-out;
+          visibility: hidden;
+
+          &.open {
+            opacity: 1;
+            transform: scaleY(1);
+            visibility: visible;
+          }
+        }
+
+        .dropdown-item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+
+          &:last-child {
+            .dropdown-link {
+              border-bottom-left-radius: 5px;
+              border-bottom-right-radius: 5px;
+            }
+          }
+
+          .dropdown-link {
+            display: block;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            margin: 0;
+            width: 100%;
+            padding: 5px 15px;
+            color: $primary-text-color;
+
+            &:hover {
+              background-color: rgba(139, 139, 139, 0.486);
+              box-shadow: $boxshadow;
+            }
+          }
+        }
+      }
+    }
+  }
+}

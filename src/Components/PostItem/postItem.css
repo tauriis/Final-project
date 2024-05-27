@@ -1,0 +1,110 @@
+.homeMain {
+  display: flex;
+  flex-direction: row;
+}
+
+#recentPosts,
+#trendingPosts {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: first baseline;
+  align-items: center;
+  padding: 20px;
+  border-right: 2px solid rgba(75, 44, 32, 0.5);
+}
+#recentPosts#trendingPosts,
+#trendingPosts#trendingPosts {
+  border-right: none;
+}
+#recentPosts .section-info,
+#trendingPosts .section-info {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #4b2c20;
+  border-bottom: 2px solid #4b2c20;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recentPosts .section-info p,
+#trendingPosts .section-info p {
+  font-size: 20px;
+}
+#recentPosts .post-item-list,
+#trendingPosts .post-item-list {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+#recentPosts .post-item-list .post-item,
+#trendingPosts .post-item-list .post-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  list-style: none;
+  padding: 20px;
+  background-color: #f8c794;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+#recentPosts .post-item-list .post-item:hover,
+#trendingPosts .post-item-list .post-item:hover {
+  scale: 1.01;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#recentPosts .post-item-list .post-item .post-link,
+#trendingPosts .post-item-list .post-item .post-link {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  margin-left: 30px;
+  width: 550px;
+  border: 1px solid rgba(75, 44, 32, 0.3);
+  padding: 10px;
+  border-radius: 5px;
+}
+#recentPosts .post-item-list .post-item .post-link .post-author,
+#trendingPosts .post-item-list .post-item .post-link .post-author {
+  font-size: 0.9rem;
+}
+#recentPosts .post-item-list .post-item .post-link .post-author .username,
+#trendingPosts .post-item-list .post-item .post-link .post-author .username {
+  font-weight: bold;
+}
+#recentPosts .post-item-list .post-item .post-link .post-title,
+#trendingPosts .post-item-list .post-item .post-link .post-title {
+  color: #4b2c20;
+  font-size: 24px;
+}
+#recentPosts .post-item-list .post-item .post-link .post-content-wrapper,
+#trendingPosts .post-item-list .post-item .post-link .post-content-wrapper {
+  width: 100%;
+}
+#recentPosts .post-item-list .post-item .post-link .post-content-wrapper .post-content,
+#trendingPosts .post-item-list .post-item .post-link .post-content-wrapper .post-content {
+  color: #4b2c20;
+  font-size: 14px;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.2;
+}
+#recentPosts .post-item-list .post-metrics,
+#trendingPosts .post-item-list .post-metrics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  font-weight: bolder;
+  color: #4b2c20;
+  font-size: 14px;
+}/*# sourceMappingURL=postItem.css.map */

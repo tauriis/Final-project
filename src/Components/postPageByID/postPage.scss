@@ -1,0 +1,145 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.sidebar {
+  @include side-bar;
+  .sidebar-container {
+    width: max-content;
+  }
+}
+
+.postIdMain {
+  width: 100%;
+  padding: 20px;
+}
+
+.post-container {
+  background-color: $secondary-bg-color;
+  padding: 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 60%;
+}
+
+.post-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 5px 0 0 0;
+  word-wrap: break-word;
+}
+
+.count-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.post-content {
+  font-size: 1.15rem;
+  margin: 10px 0 20px 0;
+  word-wrap: break-word;
+}
+
+.post-tag {
+  font-size: 14px;
+  color: $primary-text-color;
+
+  .tag {
+    font-style: italic;
+  }
+}
+
+.post-author,
+.post-views {
+  font-size: 1.05rem;
+  color: $primary-text-color;
+}
+.username,
+.view-count,
+.vote-count {
+  font-weight: bold;
+}
+
+.like-button,
+.dislike-button,
+.delete-post-button,
+.submit-comment-button,
+.like-comment-button,
+.dislike-comment-button,
+.delete-comment-button {
+  @include btn;
+  padding: 3px;
+  font-size: 0.8rem;
+  background-color: $third-bg-color;
+  margin-right: 10px;
+  border-radius: 3px;
+
+  &:hover {
+    @include btn-hover;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-container {
+  background-color: $third-bg-color;
+  padding: 10px;
+  border-top: 1px solid $primary-text-color;
+  border: 2px solid $secondary-bg-color;
+  width: 60%;
+
+  &:hover {
+    background-color: $secondary-bg-color;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
+
+.comment-text {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  word-wrap: break-word;
+}
+
+.comment-author,
+.comment-time {
+  font-size: 1.2;
+}
+
+.comment-votes {
+  margin-right: 10px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    width: fit-content;
+    padding: 5px;
+  }
+  .comment-input {
+    width: 50%;
+    min-height: 120px;
+    padding: 10px;
+    margin: 20px 0 10px 0;
+    border: 1px solid $primary-text-color;
+    border-radius: 5px;
+    border: none;
+    color: darken($primary-text-color, 20%);
+    background-color: rgba($third-bg-color, .6);
+    font-family: $font;
+    font-size: 1rem;
+    resize: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

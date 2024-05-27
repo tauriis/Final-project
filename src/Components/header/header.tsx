@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./header.css";
+import "../../Styles/_main.scss";
 import { AuthContext } from "../../AuthContext";
 
 const Header = () => {
@@ -43,36 +43,55 @@ const Header = () => {
   }, []);
 
   return (
-    <header>
-      <h1>
-        <Link to="/">Forum</Link>
+    <header className="header">
+      <h1 className="logo">
+        <Link to="/" className="logo-link">
+          Forum
+        </Link>
       </h1>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/all-posts">All Posts</Link>
+      <nav className="navigation">
+        <ul className="nav-list">
+          <li className="nav-item">
+            <Link to="/all-posts" className="nav-link">
+              All Posts
+            </Link>
           </li>
           {isLoggedIn ? (
             <>
-              <li>
-                <Link to="/create-post">Create Post</Link>
+              <li className="nav-item">
+                <Link to="/create-post" className="nav-link">
+                  Create Post
+                </Link>
               </li>
-              <li ref={dropdownRef}>
-                <div onClick={() => setDropdownOpen(!dropdownOpen)}>
-                  {currentUser.username}
+              <li ref={dropdownRef} className="dropdown">
+                <div
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className={`dropdown-toggle ${dropdownOpen ? "open" : ""}`}
+                  id="username"
+                >
+                  <span className={`username ${dropdownOpen ? "open" : ""}`}>
+                    {currentUser.username}
+                  </span>
                 </div>
-                {dropdownOpen && (
-                  <ul>
-                    <li>
-                      <span onClick={handleLogout}>Logout</span>
-                    </li>
-                  </ul>
-                )}
+                <ul className={`dropdown-menu ${dropdownOpen ? "open" : ""}`}>
+                  <li className="dropdown-item">
+                    <Link to="/profile" className="dropdown-link">
+                      Profile
+                    </Link>
+                  </li>
+                  <li className="dropdown-item">
+                    <span onClick={handleLogout} className="dropdown-link">
+                      Sign-out
+                    </span>
+                  </li>
+                </ul>
               </li>
             </>
           ) : (
-            <li>
-              <Link to="/login">Login</Link>
+            <li className="nav-item" id="login">
+              <Link to="/login" className="nav-link">
+                Sign-in
+              </Link>
             </li>
           )}
         </ul>

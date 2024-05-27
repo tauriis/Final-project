@@ -1,0 +1,102 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+%auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 70px;
+  background-color: $secondary-bg-color;
+  border-radius: 15px;
+
+  input {
+    margin-bottom: 20px;
+    outline: none;
+    border: none;
+    padding: 5px;
+    width: 240px;
+    border-radius: 8px;
+    opacity: 0.8;
+
+    &::placeholder {
+      font-size: 12px;
+    }
+
+    &:focus {
+      box-shadow: $boxshadow;
+      scale: 1.05;
+      opacity: 1;
+    }
+  }
+
+  button {
+    padding: 5px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bolder;
+    position: relative;
+    margin-top: 20px;
+    opacity: 0.8;
+
+    &:hover {
+      cursor: pointer;
+      scale: 1.05;
+      box-shadow: $boxshadow;
+      opacity: 1;
+    }
+  }
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $third-bg-color;
+
+  &.authMain {
+    form#loginFields {
+      @extend %auth-form;
+    }
+  }
+
+  &.registrationMain {
+    form {
+      @extend %auth-form;
+    }
+  }
+}
+
+div.authRedirect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  flex-direction: column;
+
+  p {
+    margin-right: 10px;
+    color: black;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 5px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bolder;
+    position: relative;
+    margin-top: 10px;
+    opacity: 0.8;
+
+    &:hover {
+      cursor: pointer;
+      scale: 1.05;
+      box-shadow: $boxshadow;
+      opacity: 1;
+    }
+  }
+}

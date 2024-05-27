@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Login from "../../modules/userLogin";
-import "./userAuthentication.css";
+import "../../Styles/_main.scss";
 
 interface LandingPageProps {
   onLogin: () => void;

@@ -1,20 +1,133 @@
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--secondary-bg-color);
-    color: white;
-    padding: 10px 30px;
-
-    a,
-    a:visited {
-      text-decoration: none;
-      color: #5a2a00;
-    }
-
-    ul {
-      display: flex;
-      list-style: none;
-      gap: 20px;
-    }
-  }
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #d8ae7e;
+  color: #4b2c20;
+  padding: 10px 30px;
+  font-family: "Titillium Web", sans-serif;
+  border-bottom: 3px solid #4b2c20;
+}
+.header .logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.header .logo .logo-link {
+  color: rgba(0, 0, 0, 0.671);
+  text-decoration: none;
+}
+.header .navigation .nav-item,
+.header .navigation .dropdown {
+  display: flex;
+  align-items: center;
+}
+.header .navigation .nav-list {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  font-size: 1.1rem;
+}
+.header .navigation .nav-list #login {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+.header .navigation .nav-list .nav-item .nav-link {
+  color: #4b2c20;
+  text-decoration: none;
+  padding: 3px 5px 3px 5px;
+  border-radius: 5px;
+  position: relative;
+}
+.header .navigation .nav-list .nav-item .nav-link::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  background-color: #4b2c20;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+.header .navigation .nav-list .nav-item .nav-link:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+.header .navigation .nav-list .dropdown {
+  position: relative;
+}
+.header .navigation .nav-list .dropdown .dropdown-toggle {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+}
+.header .navigation .nav-list .dropdown .dropdown-toggle .username {
+  color: #4b2c20;
+  font-weight: bold;
+  padding: 3px 5px 3px 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  font-size: 1.5rem;
+}
+.header .navigation .nav-list .dropdown .dropdown-toggle .username:hover {
+  background-color: rgba(248, 200, 148, 0.7);
+  border-radius: 5px;
+}
+.header .navigation .nav-list .dropdown .dropdown-toggle.open .username {
+  background-color: rgba(248, 199, 148, 0.8);
+}
+.header .navigation .nav-list .dropdown .dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: rgba(248, 199, 148, 0.85);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  gap: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-top: 10px;
+  justify-content: space-evenly;
+  align-items: center;
+  opacity: 0;
+  transform: scaleY(0);
+  transition: opacity 0.2s ease-in-out, transform 0.15s ease-in-out;
+  visibility: hidden;
+}
+.header .navigation .nav-list .dropdown .dropdown-menu.open {
+  opacity: 1;
+  transform: scaleY(1);
+  visibility: visible;
+}
+.header .navigation .nav-list .dropdown .dropdown-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.header .navigation .nav-list .dropdown .dropdown-item:last-child .dropdown-link {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.header .navigation .nav-list .dropdown .dropdown-item .dropdown-link {
+  display: block;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  margin: 0;
+  width: 100%;
+  padding: 5px 15px;
+  color: #4b2c20;
+}
+.header .navigation .nav-list .dropdown .dropdown-item .dropdown-link:hover {
+  background-color: rgba(139, 139, 139, 0.486);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}/*# sourceMappingURL=header.css.map */

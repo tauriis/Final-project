@@ -1,0 +1,32 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.footer {
+  background-color: $third-bg-color;
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-evenly;
+  border-top: $primary-text-color 3px solid;
+
+  .footer-section {
+    .footer-heading {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      color: $primary-text-color;
+      text-decoration: none;
+
+      li {
+        margin-bottom: 10px;
+        a {
+          @include link-hover-style;
+          padding-bottom: 5px;
+        }
+      }
+    }
+  }
+}

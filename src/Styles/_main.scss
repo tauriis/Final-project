@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web:400,600");
+@import "../Components/SideBar/sideBar";
+@import "../Pages/HomePage/homePage.scss";
+@import "./Variables/_variables.scss";
+@import "../Components/Header/header.scss";
+@import "../Components/PostItem/postItem.scss";
+@import "./Mixins/_mixins.scss";
+@import "../Components/Footer/footer.scss";
+@import "../Pages/AllPosts/allPosts.scss";
+@import "../Components/CreatePost/createPost.scss";
+@import "../Pages/PageByTag/tagPage.scss";
+@import "../Components/postPageByID/postPage.scss";
+@import "../Pages/UserAuthentication/userAuthentication.scss";
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+}
+
+body {
+  background-color: $third-bg-color;
+  font-family: "Titillium Web", sans-serif;
+  height: 100vh;
+}
+
+div.container {
+    min-height: 69vh;
+}

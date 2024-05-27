@@ -1,0 +1,42 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.homeMain {
+  display: flex;
+  flex-direction: row;
+}
+
+#recentPosts,
+#trendingPosts {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: first baseline;
+  align-items: center;
+  padding: 20px;
+  border-right: 2px solid rgba($primary-text-color, 0.5);
+
+  &#trendingPosts {
+    border-right: none;
+  }
+
+  .section-info {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: $primary-text-color;
+    border-bottom: 2px solid $primary-text-color;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      font-size: 20px;
+    }
+  }
+  .post-item-list {
+    @include post-item-list;
+  }
+}

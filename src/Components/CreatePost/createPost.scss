@@ -1,0 +1,77 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.createPostMain {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  height: 69vh;
+}
+
+.create-post-form {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-post-title,
+.create-post-content {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+  width: 80%;
+  border-radius: 5px;
+  border: 2px solid $primary-text-color;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $primary-text-color;
+  }
+}
+
+.create-post-title {
+  height: 50px;
+  margin-top: 20px;
+  font-family: $font;
+}
+
+.create-post-content {
+  height: 200px;
+  resize: none;
+  font-family: $font;
+}
+
+.create-post-tag {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+  color: darken($primary-text-color, 20%);
+}
+
+.create-post-title,
+.create-post-content {
+  border: 1px solid #ddd;
+  color: darken($primary-text-color, 20%);
+  background-color: rgba($primary-bg-color, .6);
+  font-size: 1.1rem;
+
+  &::placeholder {
+    color: darken($primary-text-color, 20%);
+  }
+}
+
+.create-post-tag {
+  background-color: rgba($primary-bg-color, .6);
+}
+
+.btn {
+  @include btn;
+  margin-left: 20px;
+  width: fit-content;
+
+  &:hover {
+    @include btn-hover;
+  }
+}

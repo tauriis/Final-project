@@ -1,0 +1,27 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.container {
+    display: flex;
+
+
+    .main-content {
+
+        .post-item-list {
+            @include post-item-list;
+            width: fit-content;
+        }
+    }
+  }
+  
+  
+  .main-content {
+    order: 2;
+    flex-grow: 1;
+    margin-left: 15%;
+    min-height: 69vh;
+
+    .tag-title {
+        margin: 20px 0 20px 0;
+    }
+  }

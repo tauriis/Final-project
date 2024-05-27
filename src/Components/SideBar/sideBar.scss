@@ -1,0 +1,6 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.sidebar {
+    @include side-bar;
+  }

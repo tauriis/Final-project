@@ -12,13 +12,14 @@ export interface Post {
   dislikes: string[];
   comments: Comment[];
   tags: string[];
-};
+}
 
 export interface Comment {
-    _id: string;
-    text: string;
-    username: string;
-    userId: string;
-    likes: string[];
-    dislikes: string[];
-  };
+  _id: string;
+  text: string;
+  username: string;
+  userId: string;
+  likes: string[];
+  dislikes: string[];
+  createdAt: string | null;
+}

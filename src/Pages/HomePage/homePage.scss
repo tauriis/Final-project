@@ -1,0 +1,28 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+.homeContainer {
+  display: flex;
+  justify-content: space-between;
+  width: auto;
+
+  .sidebar {
+    @include side-bar;
+  }
+
+  .homeMain {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+
+    section {
+      h2 {
+        font-size: 24px;
+      }
+
+      ul {
+        padding: 0;
+      }
+    }
+  }
+}

@@ -67,7 +67,10 @@ export const getPostById = async (req: Request, res: Response) => {
 
 export const getPostsByTag = async (req: Request, res: Response) => {
   try {
-    const posts = await Post.find({ tags: { $in: [req.params.tag] } });
+    const posts = await Post.find({ tags: { $in: [req.params.tag] } }).populate(
+      "userId",
+      "username"
+    );
     res.json(posts);
   } catch (err) {
     console.error(err);

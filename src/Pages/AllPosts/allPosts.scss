@@ -1,0 +1,70 @@
+@import "../../Styles/Variables/_variables.scss";
+@import "../../Styles/Mixins/_mixins.scss";
+
+select {
+  background-color: $primary-bg-color;
+  color: $primary-text-color;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  outline: none;
+  cursor: pointer;
+
+  option {
+    color: $primary-text-color;
+    background-color: $secondary-bg-color;
+  }
+
+  option:checked {
+    background-color: $highlight-color;
+  }
+
+  option:hover {
+    background-color: lighten($highlight-color, 10%);
+  }
+}
+
+#allPostsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+#sidebar {
+  position: sticky;
+  top: 84px;
+  height: calc(100vh - 84px);
+  overflow: auto;
+  @include side-bar;
+}
+
+#filterSection {
+  .filters-title {
+    margin: 10px 0;
+  }
+  .btn {
+    @include btn;
+    margin-left: 20px;
+
+    &:hover {
+      @include btn-hover;
+    }
+  }
+}
+
+#allPostsMain {
+  display: flex;
+  flex-direction: column;
+  margin-left: 300px;
+}
+
+#postsSection {
+  display: flex;
+  flex-direction: column;
+
+  .post-item-list {
+    margin-top: 40px;
+    @include post-item-list;
+    margin-bottom: 30px;
+  }
+}
